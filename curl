@@ -1,0 +1,12 @@
+
+curl -X POST "http://localhost:8080/signup" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"contact\": \"sdfds\", \"firstName\": \"sdfsfs\", \"lastName\": \"asdfsd\", \"password\": \"aaa\", \"userName\": \"marilena_matei@yahoo.com\"}"
+
+
+curl -X PUT "http://localhost:8080/confirmRegistration?registrationCode=RCYTLDUXUM&username=marilena_matei%40yahoo.com" -H "accept: */*"
+
+
+curl -i -H "Content-Type: application/json" -X POST -d "{ \"userName\": \"marilena_matei@yahoo.com\", \"password\": \"aaa\"}" http://localhost:8080/login
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJpbGVuYV9tYXRlaUB5YWhvby5jb20iLCJpc3MiOiJtYXJpbGVuYS5naWJzb24iLCJpYXQiOjE1NDc1MDY4NzgsImV4cCI6MTU0NzUyNDg3OH0.eHF5-ZLS4x4S3rrxtTVQeP8XpyaSQyn7CPyuQhrwuKI" http://localhost:8080/hello
+
+Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJpbGVuYV9tYXRlaUB5YWhvby5jb20iLCJzY29wZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVVNFUiJ9XSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdCIsImlhdCI6MTU0NzUwNjM5MywiZXhwIjoxNTQ3NTI0MzkzfQ.MNoOAqdFhpi-h6rZ9y96M-KtAJxoIKDL9J2WIh811c8
