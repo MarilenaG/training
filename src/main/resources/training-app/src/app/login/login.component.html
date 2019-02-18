@@ -1,0 +1,10 @@
+
+<form  (ngSubmit) = "onClickSubmit()" [formGroup]="loginForm">
+  <alert></alert>
+  <p> Welcome to training application! <br> </p>
+  <label>User name    : </label><input formControlName="userName"  type = "text"  placeholder = "User Name" ngModel>
+  <br/>
+  <label>Password     : </label> <input type = "password" formControlName="password" placeholder = "Password" ngModel>
+  <br/>
+  <input type = "submit" value = "submit">
+</form>

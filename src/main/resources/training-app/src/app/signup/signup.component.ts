@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AlertService } from '../services/alert.service';
 import { UserService } from '../services/user.service';
@@ -22,21 +22,27 @@ export class SignupComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName:  ['', Validators.required],
-      userName:  ['', Validators.required],
-      contact:   [''],
-      password:  ['', [Validators.required, Validators.minLength(6)]]
+      firstName:  new FormControl('', [Validators.required]),
+      lastName:  new FormControl('', [Validators.required]),
+      userName:  new FormControl('', [Validators.required]),
+      contact:   new FormControl(''),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)])
 
   });
    }
    onClickSubmit(data) {
+    // stop here if form is invalid
+    console.log('form: ', this.registerForm);
+    if (this.registerForm.invalid) {
+      this.alertService.error('please provide needen infos');
+      return;
+    }
     this.userService.register(this.registerForm.value)
     .pipe(first())
     .subscribe(
         data => {
             this.alertService.success('Registered. Please check your email and use the registration code in the next screen.');
-            // this.router.navigate(['/login']);
+            this.router.navigate(['/confirmRegistration']);
         },
         error => {
            console.error(error);

@@ -1,0 +1,13 @@
+
+<form  (ngSubmit) = "onClickSubmit()" [formGroup]="confirmRegistrationForm">
+  <alert></alert>
+  <p>
+    Please confirm you registration using your choosen username and the registration code you received by email
+    <br>
+  </p>
+  <label>User name    : </label><input  type = "text" formControlName="userName"  />
+  <br/>
+  <label>Registration code   : </label><input type = "text" formControlName="registrationCode"/>
+  
+  <input type = "submit" value = "submit">
+</form>

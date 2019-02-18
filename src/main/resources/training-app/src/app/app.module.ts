@@ -1,29 +1,38 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule} from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule , ReactiveFormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { AppComponent } from './app.component';
-import { SignupComponent } from './signup/signup.component';
-import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './services/alert.service';
 import { UserService } from './services/user.service';
-import { User } from './model/user';
+import { AppRoutesModule } from './app.routes'
+import { TokenStorageService } from './services/tokenStorageService';
+
+import { AppComponent } from './app.component';
+import { AlertComponent } from './alert/alert.component';
+import { SignupComponent } from './signup/signup.component';
+import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AlertComponent,
     SignupComponent,
-    AlertComponent
+    ConfirmRegistrationComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    AppRoutesModule,
+    ReactiveFormsModule
   ],
+  
   providers: [AlertService,
-              UserService],
+              UserService,
+              TokenStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

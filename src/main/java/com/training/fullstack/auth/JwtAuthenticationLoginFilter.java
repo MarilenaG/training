@@ -21,10 +21,10 @@ import java.util.Arrays;
 import static com.training.fullstack.auth.Constants.HEADER_STRING;
 import static com.training.fullstack.auth.Constants.TOKEN_PREFIX;
 
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JwtAuthenticationLoginFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthenticationLoginFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 

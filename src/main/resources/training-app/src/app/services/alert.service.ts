@@ -9,7 +9,7 @@ import { Alert, AlertType } from '../model/alert';
 @Injectable()
 export class AlertService {
     private subject = new Subject<Alert>();
-    private keepAfterRouteChange = false;
+    private keepAfterRouteChange = true;
 
     constructor(private router: Router) {
         // clear alert messages on route change unless 'keepAfterRouteChange' flag is true

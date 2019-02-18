@@ -17,6 +17,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@Valid @RequestBody UserRepresentation usertoSignup) {
         userService.signup(usertoSignup.toUser());
@@ -24,12 +25,12 @@ public class UserController {
     }
 
     @PutMapping("/confirmRegistration")
-    public ResponseEntity<UserRepresentation> confirmRegistration(@RequestParam @NotNull String username , @RequestParam @NotNull  String registrationCode ) {
-        if (! userService.confirmUser(username,registrationCode)) {
+    public ResponseEntity<UserRepresentation> confirmRegistration(@RequestParam @NotNull String userName , @RequestParam @NotNull  String registrationCode ) {
+        if (! userService.confirmUser(userName,registrationCode)) {
             throw new ResponseStatusException(
                     HttpStatus.UNPROCESSABLE_ENTITY, "UserName/registration code mismatch");
         }
-        User registeredUser = userService.getUser(username);
+        User registeredUser = userService.getUser(userName);
         return new ResponseEntity(UserRepresentation.fromUser(registeredUser), HttpStatus.OK);
 
 
