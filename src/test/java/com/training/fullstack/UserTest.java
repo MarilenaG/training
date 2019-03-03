@@ -21,7 +21,7 @@ public class UserTest {
         User someUser = userRepository.save(new User("someone@company.com","some", "user","xxxxx"));
         someUser.setActive(false);
         userRepository.saveAndFlush(someUser);
-        User foundUser = userRepository.findByUserName(someUser.getUserName());
+        User foundUser = userRepository.findByUserName(someUser.getUserName()).get();
 
         assert (foundUser!= null);
         assert (foundUser.getId().equals(someUser.getId()));

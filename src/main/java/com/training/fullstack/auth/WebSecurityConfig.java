@@ -34,9 +34,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers(
                         "/signup" ,"/confirmRegistration",
                         //allow swagger requests
-                        "/v2/api-docs", "/swagger-resources/configuration/ui", "/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/configuration/security", "/swagger-ui.html", "/webjars/**",
+                        "/v2/api-docs", "/swagger-resources/configuration/ui", "/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/configuration/security", "/swagger-ui.html", "/webjars/**"
                         //allow h2 console requests
-                        "/h2-console/**","/**.ico").permitAll()
+                        ,"/h2-console","/h2-console/**","/**.ico").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // this filter will be used for /login

@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 
 @Component
 public class UserService  {
@@ -48,7 +49,7 @@ public class UserService  {
     }
 
     public boolean confirmUser(String userName, String registrationCode){
-        User user = userRepository.findByUserName(userName);
+        User user = userRepository.findByUserName(userName).orElseThrow(()-> new NoSuchElementException("No user with name "+ userName));
         boolean userConfirmed =  registrationCode.equals(user.getRegistrationCode());
         if (userConfirmed){
             user.setActive(true);
@@ -59,7 +60,7 @@ public class UserService  {
     }
 
     public User getUser(String userName){
-        return userRepository.findByUserName(userName);
+        return userRepository.findByUserName(userName).orElseThrow(()-> new NoSuchElementException("No user with name "+ userName));
     }
 
 

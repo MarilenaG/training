@@ -8,6 +8,7 @@ import com.training.fullstack.mentor.model.Calendar;
 import com.training.fullstack.mentor.model.Mentor;
 import com.training.fullstack.mentor.model.MentorSkill;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Component
 public class MentorService {
     private MentorRepository mentorRepository;
     private SkillRepository skillRepository;
@@ -26,14 +28,14 @@ public class MentorService {
         this.skillRepository = skillRepository;
     }
 
-    public List<Mentor> searchMentorByTimeAndTechnology (String technology, LocalTime desiredTime){
+    public List<Mentor> searchMentorByTimeAndTechnology (String technology, LocalTime desiredTime, LocalDate desiredDate){
         if (technology!=null && desiredTime!= null){
-            return  mentorRepository.findAll(MentorSpecification.hasSkillNamedAndIsAvailableOn(technology,desiredTime));
+            return  mentorRepository.findAll(MentorSpecification.hasSkillNamedAndIsAvailableOn(technology,desiredTime, desiredDate));
         } else {
             if (technology!=null){
                 return  mentorRepository.findAll(MentorSpecification.hasSkillNamed(technology));
             } else {
-                return mentorRepository.findAll(MentorSpecification.isAvailableOn(desiredTime));
+                return mentorRepository.findAll(MentorSpecification.isAvailableOn(desiredTime, desiredDate));
             }
         }
     }
@@ -45,10 +47,10 @@ public class MentorService {
         return  subject;
     }
 
-    public Mentor addMentorSkill ( String mentorUserName, String skillName, Integer skillRating, Integer yearsExperience, Integer trainingsDelivered) {
+    public Mentor addMentorSkill ( String mentorUserName, String skillName, Integer skillRating, Integer yearsExperience, Integer trainingsDelivered, Double fee) {
         Mentor mentor = mentorRepository.findByUserName(mentorUserName).orElseThrow(()->new NoSuchElementException("No mentor with name " + mentorUserName));
         Skill skill = skillRepository.findByTitle(skillName).orElseThrow(()-> new NoSuchElementException("No skill with title " + skillName));
-        mentor.addMentorSkill( new MentorSkill(skill,skillRating,yearsExperience,trainingsDelivered));
+        mentor.addMentorSkill( new MentorSkill(skill,skillRating,yearsExperience,trainingsDelivered, fee));
         mentorRepository.save(mentor);
         return mentor;
     }

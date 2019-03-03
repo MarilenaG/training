@@ -22,7 +22,7 @@ public class UserServiceTest {
     public void signup_should_create_user_inactive(){
         User userToSignup = new User("marilena_matei@yahoo.com", "Marilena", "Gibson","parola");
         userService.signup(userToSignup);
-        User savedUser = userRepository.findByUserName("marilena_matei@yahoo.com");
+        User savedUser = userRepository.findByUserName("marilena_matei@yahoo.com").get();
         assert (!savedUser.getActive());
         userRepository.delete(userToSignup);
     }
@@ -31,7 +31,7 @@ public class UserServiceTest {
     public void confirmation_with_incorect_code_should_fail(){
         User userToSignup = new User("marilena_matei@yahoo.com", "Marilena", "Gibson","parola");
         userService.signup(userToSignup);
-        User savedUser = userRepository.findByUserName("marilena_matei@yahoo.com");
+        User savedUser = userRepository.findByUserName("marilena_matei@yahoo.com").get();
 
         assert (!userService.confirmUser("marilena_matei@yahoo.com","xxx"));
         userRepository.delete(userToSignup);
@@ -41,7 +41,7 @@ public class UserServiceTest {
     public void confirmation_with_corect_code_should_succeed(){
         User userToSignup = new User("marilena_matei@yahoo.com", "Marilena", "Gibson","parola");
         userService.signup(userToSignup);
-        User savedUser = userRepository.findByUserName("marilena_matei@yahoo.com");
+        User savedUser = userRepository.findByUserName("marilena_matei@yahoo.com").get();
         assert (userService.confirmUser("marilena_matei@yahoo.com",userToSignup.getRegistrationCode()));
         userRepository.delete(userToSignup);
     }

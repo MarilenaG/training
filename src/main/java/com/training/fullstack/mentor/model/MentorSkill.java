@@ -28,11 +28,15 @@ public class MentorSkill {
     @Column(name = "trainings_delivered")
     private Integer trainingsDelivered;
 
-    public MentorSkill( Skill skill, Integer skillRating, Integer yearsExperience, Integer trainingsDelivered) {
+    @Column (name="fee")
+    private Double fee;
+
+    public MentorSkill( Skill skill, Integer skillRating, Integer yearsExperience, Integer trainingsDelivered, Double fee) {
         this.skill = skill;
         this.skillRating = skillRating;
         this.yearsExperience = yearsExperience;
         this.trainingsDelivered = trainingsDelivered;
+        this.fee = fee;
     }
 
     public Long getId() {
@@ -81,5 +85,13 @@ public class MentorSkill {
 
     public void setTrainingsDelivered(Integer trainingsDelivered) {
         this.trainingsDelivered = trainingsDelivered;
+    }
+
+    public Double getFee() {
+        return fee;
+    }
+
+    public void setFee(Double fee) {
+        this.fee = fee;
     }
 }

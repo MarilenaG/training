@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -30,6 +31,9 @@ public class Mentor {
     @URL(protocol = "http")
     private String linkedinUrl;
 
+    @Column (name = "mentor_IBAN")
+    private String mentorIBAN;
+
     @Column(name = "mobile_number")
     private String mobileNumber;
     @Column(name = "register_datetime")
@@ -40,21 +44,22 @@ public class Mentor {
     private String registrationCode;
 
     @OneToMany(mappedBy ="mentor")
-    private Set<MentorSkill> mentorSkills;
+    private Set<MentorSkill> mentorSkills = new HashSet<MentorSkill>();
 
     @OneToMany(mappedBy ="mentor")
-    private Set<Calendar> calendars;
+    private Set<Calendar> calendars =  new HashSet<Calendar>();
 
     @NotNull
     private Boolean active = true;
 
-    public Mentor(@NotNull @Email @Size(max = 100) String userName, Integer yearsExperience, @URL(protocol = "http") String linkedinUrl, String mobileNumber, LocalDate registrationDate, @Size(max = 100) String registrationCode) {
+    public Mentor(@NotNull @Email @Size(max = 100) String userName, Integer yearsExperience, @URL(protocol = "http") String linkedinUrl, String mobileNumber, String mentorIBAN) {
         this.userName = userName;
         this.yearsExperience = yearsExperience;
         this.linkedinUrl = linkedinUrl;
         this.mobileNumber = mobileNumber;
         this.registrationDate = registrationDate;
         this.registrationCode = registrationCode;
+        this.mentorIBAN = mentorIBAN;
     }
 
     public Boolean getActive() {
@@ -102,6 +107,7 @@ public class Mentor {
     public Mentor(Long id) {
         this.id = id;
     }
+
     public Mentor() {
        super();
     }
@@ -144,6 +150,14 @@ public class Mentor {
 
     public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
+    }
+
+    public String getMentorIBAN() {
+        return mentorIBAN;
+    }
+
+    public void setMentorIBAN(String mentorIBAN) {
+        this.mentorIBAN = mentorIBAN;
     }
 }
 

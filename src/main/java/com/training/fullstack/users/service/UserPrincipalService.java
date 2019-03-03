@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.NoSuchElementException;
+
 @Component
 public class UserPrincipalService implements UserDetailsService {
     private UserRepository userRepository;
@@ -19,6 +21,6 @@ public class UserPrincipalService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        return new UserPrincipal(userRepository.findByUserName(userName));
+        return new UserPrincipal(userRepository.findByUserName(userName).orElseThrow(()-> new NoSuchElementException("No user with name "+ userName)));
     }
 }
