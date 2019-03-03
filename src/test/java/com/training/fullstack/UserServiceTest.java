@@ -38,7 +38,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void confirmation_with_incorect_code_should_succeed(){
+    public void confirmation_with_corect_code_should_succeed(){
         User userToSignup = new User("marilena_matei@yahoo.com", "Marilena", "Gibson","parola");
         userService.signup(userToSignup);
         User savedUser = userRepository.findByUserName("marilena_matei@yahoo.com");
