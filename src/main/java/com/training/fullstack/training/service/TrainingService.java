@@ -4,6 +4,7 @@ import com.training.fullstack.admin.infrastructure.SkillRepository;
 import com.training.fullstack.admin.model.Skill;
 import com.training.fullstack.admin.service.SkillService;
 import com.training.fullstack.mentor.infrastructure.MentorRepository;
+import com.training.fullstack.mentor.infrastructure.MentorSkillRepository;
 import com.training.fullstack.mentor.model.Mentor;
 import com.training.fullstack.mentor.model.MentorSkill;
 import com.training.fullstack.payment.PaymentService;
@@ -31,25 +32,27 @@ public class TrainingService {
     private MailService mailService;
     private PaymentService paymentService;
     private SkillRepository skillRepository;
+    private MentorSkillRepository mentorSkillRepository;
 
     // 10 percent of all payments perceived as commision by the website
     private static final int PERCENTAGE_COMMISION = 10;
 
-    public TrainingService(TrainingRepository trainingRepository, UserRepository userRepository, MentorRepository mentorRepository, MailService mailService, PaymentService paymentService, SkillRepository skillRepository) {
+    public TrainingService(TrainingRepository trainingRepository, UserRepository userRepository, MentorRepository mentorRepository, MailService mailService, PaymentService paymentService, SkillRepository skillRepository, MentorSkillRepository mentorSkillRepository) {
         this.trainingRepository = trainingRepository;
         this.userRepository = userRepository;
         this.mentorRepository = mentorRepository;
         this.mailService = mailService;
         this.paymentService = paymentService;
         this.skillRepository = skillRepository;
+        this.mentorSkillRepository = mentorSkillRepository;
     }
 
     public Training proposeTraining(String userName, String mentorName, Long skillId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         Mentor mentor = mentorRepository.findByUserName(mentorName).orElseThrow(()->new NoSuchElementException("No mentor with name " + mentorName));
         User user = userRepository.findByUserName(userName).orElseThrow(()->new NoSuchElementException("No user with name " + userName));
 
-        Training training = new Training(user.getId(), mentor.getId(),skillId, TrainingStatus.PROPOSED,0);
-
+        Training training = new Training( mentor.getId(),user.getId(),skillId, TrainingStatus.PROPOSED,0);
+        Double fee = getFeeForTheTraining(training);
         for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1))
         {
             if (date.getDayOfWeek()!= DayOfWeek.SATURDAY && date.getDayOfWeek()!= DayOfWeek.SUNDAY){
@@ -63,7 +66,8 @@ public class TrainingService {
 
     public Training acceptTraining (Long trainingId){
         Training training = trainingRepository.findById(trainingId).orElseThrow(()-> new NoSuchElementException("No training with id "+ trainingId));
-        User user = userRepository.findById(training.getUserId()).orElseThrow(()->new NoSuchElementException("No user with id " + training.getUserId()));
+        User user = userRepository.findById(training.getUserId())
+                .orElseThrow(()->new NoSuchElementException("No user with id " + training.getUserId()));
         training.setStatus(TrainingStatus.ACCEPTED);
         trainingRepository.save(training);
         mailService.sendSimpleMessage(user.getUserName(), "Training accepted", "Training with id "+ training.getId()+" was accepted by the mentor. Please login in the application and finalize the proposal .");
@@ -76,6 +80,15 @@ public class TrainingService {
         training.setStatus(TrainingStatus.AWAITING_PAYMENT);
         trainingRepository.save(training);
         mailService.sendSimpleMessage(user.getUserName(), "Training finalized", "Training with id "+ training.getId()+" was finalized. Please login in the application and pay before you can attend classes.");
+        return  training;
+    }
+
+    public Training payTraining (Long trainingId){
+        Training training = trainingRepository.findById(trainingId).orElseThrow(()-> new NoSuchElementException("No training with id "+ trainingId));
+        User user = userRepository.findById(training.getUserId()).orElseThrow(()->new NoSuchElementException("No user with id " + training.getUserId()));
+        paymentService.payForTraining(user.getUserName(),getFeeForTheTraining(training));
+        training.setStatus(TrainingStatus.STARTED);
+        trainingRepository.save(training);
         return  training;
     }
     private Double calculateQuarterlyAmountForMentor( Double totalFee){
@@ -111,10 +124,11 @@ public class TrainingService {
     @Transactional
     public Training updateProgress (Long trainingId, Integer progress){
         Training training = trainingRepository.findById(trainingId).orElseThrow(()-> new NoSuchElementException("No training with id "+ trainingId));
+        Mentor mentor = mentorRepository.findById(training.getMentorId()).orElseThrow(()-> new NoSuchElementException("No mentor with id "+ training.getMentorId()));
+
         training.setProgress( progress);
 
-        Mentor mentor = mentorRepository.findById(training.getMentorId()).orElseThrow(()-> new NoSuchElementException("No mentor with id "+ training.getMentorId()));
-        Double fee = getFeeForTheTraining(training, mentor);
+        Double fee = getFeeForTheTraining(training);
 
         if (progress>=25 & training.getPayedPercentage()< 25) {
             paymentService.payMentorAfterFirstQuarterTraining(mentor.getMentorIBAN(),calculateQuarterlyAmountForMentor(fee));
@@ -131,19 +145,22 @@ public class TrainingService {
         if (progress==100 & training.getPayedPercentage()<100) {
             paymentService.payMentorAfterEndTraining(mentor.getMentorIBAN(),calculateQuarterlyAmountForMentor(fee));
             training.setPayedPercentage(100);
+            training.setStatus(TrainingStatus.ENDED);
         }
         trainingRepository.save(training);
         return training;
     }
 
 
-    private Double getFeeForTheTraining (Training training, Mentor mentor){
-        for (MentorSkill mentorSkill : mentor.getMentorSkills()   ) {
-            if (mentorSkill.getSkill().getId()== training.getSkillId()){
+    private Double getFeeForTheTraining (Training training){
+        MentorSkill mentorSkill = mentorSkillRepository.getByMentorIdAndSkillId(training.getMentorId(), training.getSkillId()).orElseThrow(()-> new NoSuchElementException("No mentor with id "+ training.getMentorId() +" and skillId " + training.getSkillId()));
+
+//        for (MentorSkill mentorSkill : mentor.getMentorSkills()   ) {
+//            if (mentorSkill.getSkill().getId()== training.getSkillId()){
                 return mentorSkill.getFee();
-            }
-        }
-        return Double.valueOf(0);
+//            }
+//        }
+//        return Double.valueOf(0);
     }
 
 }

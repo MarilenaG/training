@@ -5,7 +5,8 @@ import com.training.fullstack.mentor.model.Mentor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
+@Entity
+@Table(name = "training_schedule")
 public class TrainingSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

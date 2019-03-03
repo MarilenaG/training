@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "trainign")
+@Table(name = "training")
 public class Training implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class Training implements Serializable {
     private String rejectComments;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 8)
+    @Column(length = 20)
     private TrainingStatus status;
 
     @OneToMany(mappedBy ="training")
@@ -42,6 +42,9 @@ public class Training implements Serializable {
     private Integer payedPercentage;
 
     private Integer rating;
+
+    public Training() {
+    }
 
     public Training(Long mentorId, Long userId, Long skillId, TrainingStatus status, Integer progress) {
         this.mentorId = mentorId;

@@ -6,5 +6,5 @@ public enum TrainingStatus {
     AWAITING_PAYMENT,
     DENIED,
     STARTED,
-    FINALIZED;
+    ENDED;
 }

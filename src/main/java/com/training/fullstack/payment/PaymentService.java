@@ -1,5 +1,8 @@
 package com.training.fullstack.payment;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PaymentService {
 
     public boolean payForTraining( String username,  Double fee ){
