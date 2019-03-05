@@ -33,7 +33,7 @@ public class Training implements Serializable {
     @Column(length = 20)
     private TrainingStatus status;
 
-    @OneToMany(mappedBy ="training")
+    @OneToMany(mappedBy ="training", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TrainingSchedule> schedules =  new HashSet<TrainingSchedule>();
 
     @Column(name = "percentage_progress")

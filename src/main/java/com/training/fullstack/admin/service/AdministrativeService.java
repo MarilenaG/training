@@ -4,10 +4,14 @@ import com.training.fullstack.mentor.infrastructure.MentorRepository;
 import com.training.fullstack.mentor.model.Mentor;
 import com.training.fullstack.users.infrastructure.UserRepository;
 import com.training.fullstack.users.model.User;
+import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Component
+@Transactional
 public class AdministrativeService {
     UserRepository userRepository;
     MentorRepository mentorRepository;

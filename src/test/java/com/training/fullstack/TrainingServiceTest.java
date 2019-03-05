@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = {"spring.h2.console.enabled=true"})
+@Transactional
 public class TrainingServiceTest {
 
     @Autowired    TrainingService trainingService;
@@ -37,13 +39,13 @@ public class TrainingServiceTest {
 
     @Before
     public void initDatabase(){
-        try {
-            Server webServer = Server.createWebServer("-web",
-                    "-webAllowOthers", "-webPort", "8082");
-            webServer.start();
-        } catch (SQLException ee) {
-            ee.printStackTrace();
-        }
+//        try {
+//            Server webServer = Server.createWebServer("-web",
+//                    "-webAllowOthers", "-webPort", "8082");
+//            webServer.start();
+//        } catch (SQLException ee) {
+//            ee.printStackTrace();
+//        }
 
         userRepository.deleteAll();
         User user = new User("marilena_matei@yahoo.com", "Marilena", "Gibson","parola");
@@ -57,7 +59,7 @@ public class TrainingServiceTest {
         skillRepository.save(new Skill("spring","IOC, spring mvc, dependency injection","java knowledge"));
 
         mentorRepository.deleteAll();
-        Mentor mentor = new  Mentor("marilenam@gmail.com",15,"http://localhost:1000", "07672223","mentor iban");
+        Mentor mentor = new  Mentor("marilenam@gmail.com",15,"http://localhost:1000", "07672223","mentor iban","aaa",true);
         mentor.setRegistrationDate(LocalDate.now());
         mentor.setActive(true);
         Skill skill = skillRepository.findByTitle("java").get();

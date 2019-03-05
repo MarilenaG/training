@@ -10,6 +10,7 @@ import com.training.fullstack.mentor.model.MentorSkill;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,7 +20,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Component
-public class MentorService {
+@Transactional
+public class MentorService  {
     private MentorRepository mentorRepository;
     private SkillRepository skillRepository;
 
@@ -62,6 +64,16 @@ public class MentorService {
         mentor.setLinkedinUrl(linkedinUrl);
         mentorRepository.save(mentor);
         return mentor;
+    }
+
+
+
+    public Mentor getMentor(String mentorName){
+        return mentorRepository.findByUserName(mentorName).orElseThrow(()-> new NoSuchElementException("No mentor with name "+ mentorName));
+    }
+
+    public List<Mentor> listAllMentors(){
+        return mentorRepository.findAll();
     }
 }
 

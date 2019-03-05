@@ -23,8 +23,8 @@ public interface MentorRepository extends JpaRepository<Mentor, Long>, JpaSpecif
 
     Optional<Mentor> findByUserName(String userName);
 
-    @Query(value = "SELECT m FROM Mentor m  JOIN FETCH m.mentorSkills s where m.id = :id  and s.skill.id = :skillId")
-    Optional<Mentor> findByIdAndSkillId(@Param("id") Long id, @Param("skillId") Long skillId);
+    @Query(value = "SELECT m FROM Mentor m  JOIN FETCH m.mentorSkills s where m.id = :id  ")
+    Optional<Mentor> loadSkillsByMentor(@Param("id") Long id);
 
 
 }

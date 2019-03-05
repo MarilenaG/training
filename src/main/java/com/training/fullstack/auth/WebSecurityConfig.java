@@ -1,6 +1,5 @@
 package com.training.fullstack.auth;
 
-import com.training.fullstack.users.service.UserPrincipalService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,12 +31,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests().antMatchers(
-                        "/signup" ,"/confirmRegistration",
+                        "/*/signup" ,"/*/confirmRegistration",
                         //allow swagger requests
                         "/v2/api-docs", "/swagger-resources/configuration/ui", "/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/configuration/security", "/swagger-ui.html", "/webjars/**"
                         //allow h2 console requests
                         ,"/h2-console","/h2-console/**","/**.ico").permitAll()
-                .anyRequest().authenticated()
+//                .anyRequest().authenticated()
                 .and()
                 // this filter will be used for /login
                 .addFilter(new JwtAuthenticationLoginFilter(authenticationManager()))

@@ -2,6 +2,7 @@ package com.training.fullstack.users.controller;
 
 
 import com.training.fullstack.users.model.User;
+import com.training.fullstack.users.service.SignupService;
 import com.training.fullstack.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,20 +14,22 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RestController
+@RequestMapping(value = "/user")
 public class UserController {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private SignupService signupService;
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@Valid @RequestBody UserRepresentation usertoSignup) {
-        userService.signup(usertoSignup.toUser());
+        signupService.signup(usertoSignup.toUser(), false);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/confirmRegistration")
     public ResponseEntity<UserRepresentation> confirmRegistration(@RequestParam @NotNull String userName , @RequestParam @NotNull  String registrationCode ) {
-        if (! userService.confirmUser(userName,registrationCode)) {
+        if (! signupService.confirmApplicationMember(userName,registrationCode, false)) {
             throw new ResponseStatusException(
                     HttpStatus.UNPROCESSABLE_ENTITY, "UserName/registration code mismatch");
         }

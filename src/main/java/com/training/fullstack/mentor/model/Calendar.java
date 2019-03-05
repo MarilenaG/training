@@ -1,5 +1,8 @@
 package com.training.fullstack.mentor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -9,19 +12,27 @@ import java.time.LocalTime;
 public class Calendar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "mentor_id")
     private Mentor mentor;
-
+    @JsonProperty
     @Column(name = "start_Time" )
     private LocalTime startTime;
+    @JsonProperty
     @Column(name = "end_time")
     private LocalTime endTime;
+    @JsonProperty
     @Column(name = "start_Date" )
     private LocalDate startDate;
+    @JsonProperty
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    public Calendar() {
+    }
 
     public Calendar(LocalTime startTime, LocalTime endTime, LocalDate startDate, LocalDate endDate) {
         this.startTime = startTime;

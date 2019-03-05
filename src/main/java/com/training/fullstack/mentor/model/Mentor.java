@@ -1,11 +1,14 @@
 package com.training.fullstack.mentor.model;
 
+import com.training.fullstack.users.model.ApplicationMember;
+import com.training.fullstack.users.model.UserType;
 import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,16 +16,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "mentors")
-public class Mentor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Mentor extends ApplicationMember implements Serializable {
 
-    @NotNull
-    @Email
-    @Size(max = 100)
-    @Column(unique = true)
-    private String userName;
 
     @Column(name = "years_experience")
     private Integer yearsExperience;
@@ -36,54 +31,32 @@ public class Mentor {
 
     @Column(name = "mobile_number")
     private String mobileNumber;
-    @Column(name = "register_datetime")
-    private LocalDate registrationDate;
 
-    @Size(max = 100)
-    @Column(name = "registration_code")
-    private String registrationCode;
 
-    @OneToMany(mappedBy ="mentor")
+    @OneToMany(mappedBy ="mentor" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MentorSkill> mentorSkills = new HashSet<MentorSkill>();
 
-    @OneToMany(mappedBy ="mentor")
+    @OneToMany(mappedBy ="mentor", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Calendar> calendars =  new HashSet<Calendar>();
 
-    @NotNull
-    private Boolean active = true;
 
-    public Mentor(@NotNull @Email @Size(max = 100) String userName, Integer yearsExperience, @URL(protocol = "http") String linkedinUrl, String mobileNumber, String mentorIBAN) {
+
+    public Mentor(@NotNull @Email @Size(max = 100) String userName,
+                  Integer yearsExperience,
+                  @URL(protocol = "http") String linkedinUrl,
+                  String mobileNumber,
+                  String mentorIBAN,
+                  String password,
+                  Boolean active
+    ) {
         this.userName = userName;
         this.yearsExperience = yearsExperience;
         this.linkedinUrl = linkedinUrl;
         this.mobileNumber = mobileNumber;
-        this.registrationDate = registrationDate;
-        this.registrationCode = registrationCode;
         this.mentorIBAN = mentorIBAN;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
+        this.password = password;
         this.active = active;
-    }
-
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public String getRegistrationCode() {
-        return registrationCode;
-    }
-
-    public void setRegistrationCode(String registrationCode) {
-        this.registrationCode = registrationCode;
+        this.userType = UserType.MENTOR;
     }
 
     // No setter, only a getter which returns an immutable collection
@@ -110,23 +83,11 @@ public class Mentor {
 
     public Mentor() {
        super();
+       this.mentorSkills = new HashSet<>();
+       this.calendars = new HashSet<>();
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public Integer getYearsExperience() {
         return yearsExperience;

@@ -1,5 +1,7 @@
-package com.training.fullstack.users.model;
+package com.training.fullstack.auth;
 
+import com.training.fullstack.users.model.ApplicationMember;
+import com.training.fullstack.users.model.UserType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,18 +15,19 @@ public class UserPrincipal  implements UserDetails {
     private String userName;
     private String password;
     private List<GrantedAuthority> roles ;
-    private User user;  // set when a user is authenticated
+    private boolean active;
     private UserType userType ;// user, admin or mentor;
 
     public UserPrincipal() {
     }
 
-    public UserPrincipal(User user) {
-        this.userName = user.getUserName();
-        this.roles = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
-        this.password=user.getPassword();
-        this.user =user;
-        this.userType = UserType.USER;
+    public UserPrincipal(ApplicationMember applicationMember) {
+        this.userName = applicationMember.getUserName();
+        this.password=applicationMember.getPassword();
+        this.userType = applicationMember.getUserType();
+        this.active = applicationMember.getActive();
+        this.roles = Arrays.asList(new SimpleGrantedAuthority("ROLE_" + userType.name()));
+
     }
 
     @Override
@@ -44,22 +47,22 @@ public class UserPrincipal  implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return user!=null?user.getActive():true;
+        return active;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user!=null?user.getActive():true;
+        return active;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return user!=null?user.getActive():true;
+        return active;
     }
 
     @Override
     public boolean isEnabled() {
-        return user!=null?user.getActive():true;
+        return active;
     }
 
     public void setUsername(String userName) {

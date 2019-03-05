@@ -2,6 +2,7 @@ package com.training.fullstack.users.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.training.fullstack.users.model.User;
+import com.training.fullstack.users.model.UserType;
 import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.Email;
@@ -19,6 +20,7 @@ public class UserRepresentation {
     @JsonProperty private LocalDate registrationDate;
     @JsonProperty private String registrationCode;
     @JsonProperty private Boolean active = true;
+    @JsonProperty private UserType userType;
 
     public UserRepresentation(Long id, String userName, String firstName, String lastName, String password, String contact, LocalDate registrationDate, String registrationCode, Boolean active) {
         this.id = id;
@@ -44,6 +46,14 @@ public class UserRepresentation {
         UserRepresentation userRepresentaion = new UserRepresentation();
         BeanUtils.copyProperties(user, userRepresentaion);
         return userRepresentaion;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public Long getId() {

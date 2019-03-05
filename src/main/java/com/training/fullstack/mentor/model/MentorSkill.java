@@ -39,6 +39,9 @@ public class MentorSkill {
         this.fee = fee;
     }
 
+    public MentorSkill() {
+    }
+
     public Long getId() {
         return id;
     }

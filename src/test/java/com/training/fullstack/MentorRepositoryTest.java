@@ -16,11 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class MentorRepositoryTest {
 
 
@@ -42,7 +44,8 @@ public class MentorRepositoryTest {
     }
 
     private Mentor constructMentor(){
-        Mentor mentor = new  Mentor("m.m@c.com",15,"http://localhost:1000", "07672223","mentor iban");
+
+        Mentor mentor = new  Mentor("m.m@c.com",15,"http://localhost:1000", "07672223","mentor iban","aaa",true);
         mentor.setRegistrationDate(LocalDate.now());
         mentor.setActive(true);
         Skill skill = skillRepository.findByTitle("java").get();

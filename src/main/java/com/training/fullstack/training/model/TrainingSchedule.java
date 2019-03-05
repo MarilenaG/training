@@ -31,6 +31,9 @@ public class TrainingSchedule {
         this.trainingDate = trainingDate;
     }
 
+    public TrainingSchedule() {
+    }
+
     public Long getId() {
         return id;
     }

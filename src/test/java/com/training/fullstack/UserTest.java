@@ -18,6 +18,7 @@ public class UserTest {
 
     @Test
     public void givenUserRepository_whenSaveAndRetreiveUser_thenOK() {
+        userRepository.deleteAll();
         User someUser = userRepository.save(new User("someone@company.com","some", "user","xxxxx"));
         someUser.setActive(false);
         userRepository.saveAndFlush(someUser);

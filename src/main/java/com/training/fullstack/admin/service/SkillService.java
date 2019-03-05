@@ -4,11 +4,13 @@ import com.training.fullstack.admin.infrastructure.SkillRepository;
 import com.training.fullstack.admin.model.Skill;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Component
+@Transactional
 public class SkillService {
 
     private SkillRepository skillRepository;
