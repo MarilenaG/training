@@ -12,6 +12,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -41,7 +45,16 @@ public class UserController {
 
    @GetMapping("/hello")
    public ResponseEntity<String> hello(){
-        return new ResponseEntity("hello there", HttpStatus.OK);
+        return new ResponseEntity("hello there from the back", HttpStatus.OK);
    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<UserRepresentation>> listAllUsers () {
+        List<User> allUsers = userService.listAllUsers();
+        List<UserRepresentation> results = allUsers.stream()
+                .map(UserRepresentation::fromUser)
+                .collect(toList());
+        return ok(results);
+    }
 
 }

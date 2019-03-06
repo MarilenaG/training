@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Component
@@ -23,5 +24,7 @@ public class UserService  {
         return userRepository.findByUserName(userName).orElseThrow(()-> new NoSuchElementException("No user with name "+ userName));
     }
 
-
+    public List<User> listAllUsers(){
+        return userRepository.findAll();
+    }
 }
