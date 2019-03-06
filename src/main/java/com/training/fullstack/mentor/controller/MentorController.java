@@ -1,6 +1,7 @@
 package com.training.fullstack.mentor.controller;
 
 
+import com.training.fullstack.admin.service.AdministrativeService;
 import com.training.fullstack.mentor.model.Mentor;
 import com.training.fullstack.mentor.service.MentorService;
 import com.training.fullstack.users.service.SignupService;
@@ -22,9 +23,13 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping(value = "/mentor")
+@CrossOrigin(origins = "http://localhost:8091")
 public class MentorController {
     @Autowired
     private MentorService mentorService;
+
+    @Autowired
+    private AdministrativeService adminService;
 
     @Autowired
     private SignupService signupService;
@@ -83,6 +88,16 @@ public class MentorController {
         return ok(results);
     }
 
+    @PostMapping("/blockMentor")
+    public ResponseEntity<Void> blockMentor(@RequestBody @NotNull Mentor mentor  ) {
+        adminService.blockMentor(mentor.getId());
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/unblockMentor")
+    public ResponseEntity<Void> unblockUser(@RequestBody @NotNull Mentor mentor ) {
+        adminService.unblockMentor(mentor.getId());
+        return ResponseEntity.ok().build();
+    }
 
 
     }

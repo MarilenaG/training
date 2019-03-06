@@ -26,10 +26,19 @@ public class AdministrativeService {
         user.setActive( false);
         userRepository.save(user);
     }
-
+    public void unblockUser ( long userId){
+        User user = userRepository.findById(userId).orElseThrow(()-> new NoSuchElementException("User with id" + userId));
+        user.setActive( true);
+        userRepository.save(user);
+    }
     public void blockMentor ( long mentorId){
         Mentor mentor = mentorRepository.findById(mentorId).orElseThrow(()-> new NoSuchElementException("mentor with id" + mentorId));
         mentor.setActive( false);
+        mentorRepository.save(mentor);
+    }
+    public void unblockMentor ( long mentorId){
+        Mentor mentor = mentorRepository.findById(mentorId).orElseThrow(()-> new NoSuchElementException("Mentor with id" + mentorId));
+        mentor.setActive( true);
         mentorRepository.save(mentor);
     }
 }

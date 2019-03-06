@@ -1,9 +1,14 @@
 package com.training.fullstack.training.controller;
 
 
+import com.training.fullstack.admin.infrastructure.SkillRepository;
+import com.training.fullstack.admin.model.Skill;
+import com.training.fullstack.mentor.infrastructure.MentorRepository;
 import com.training.fullstack.mentor.model.Mentor;
 import com.training.fullstack.training.model.Training;
 import com.training.fullstack.training.service.TrainingService;
+import com.training.fullstack.users.infrastructure.UserRepository;
+import com.training.fullstack.users.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +23,19 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
-
+@CrossOrigin(origins = "http://localhost:8091")
 @RestController
 @RequestMapping(value = "/training")
+
 public class TrainingController {
     @Autowired
     private TrainingService trainingService;
-
+    @Autowired
+    MentorRepository mentorRepository;
+    @Autowired
+    SkillRepository skillRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @PostMapping("/proposeTraining")
     public ResponseEntity<TrainingRepresentation> proposeTraining(@NotNull @RequestParam String userName,
@@ -110,10 +121,28 @@ public class TrainingController {
 
         List<TrainingRepresentation> results = trainingsInProgress.stream()
                 .map(TrainingRepresentation::fromTraining)
+                .map(t->fillMentorName(t))
+                .map(t->fillUserName(t))
+                .map(t->fillSkilltitle(t))
                 .collect(toList());
         return ok(results);
     }
 
+    private TrainingRepresentation fillUserName(TrainingRepresentation trainingRepresentation){
+        User foundUser = userRepository.getOne(trainingRepresentation.getUserId());
+        trainingRepresentation.setUserName(foundUser.getUserName());
+        return trainingRepresentation;
+    }
 
+    private TrainingRepresentation fillMentorName(TrainingRepresentation trainingRepresentation){
+        Mentor foundMentor = mentorRepository.getOne(trainingRepresentation.getMentorId());
+        trainingRepresentation.setMentorName(foundMentor.getUserName());
+        return trainingRepresentation;
+    }
 
+    private TrainingRepresentation fillSkilltitle(TrainingRepresentation trainingRepresentation){
+        Skill foundskill = skillRepository.getOne(trainingRepresentation.getSkillId());
+        trainingRepresentation.setSkillTitle(foundskill.getTitle());
+        return trainingRepresentation;
+    }
     }

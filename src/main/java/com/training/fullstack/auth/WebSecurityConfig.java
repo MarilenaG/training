@@ -31,22 +31,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests().antMatchers(
-                        "/*/signup" ,"/*/confirmRegistration",
-                        //allow swagger requests
-                        "/v2/api-docs", "/swagger-resources/configuration/ui", "/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/configuration/security", "/swagger-ui.html", "/webjars/**"
-                        //allow h2 console requests
-                        ,"/h2-console","/h2-console/**","/**.ico").permitAll()
+//                        "/*/signup" ,"/*/confirmRegistration",
+//                        //allow swagger requests
+//                        "/v2/api-docs", "/swagger-resources/configuration/ui", "/configuration/ui", "/swagger-resources", "/swagger-resources/configuration/security", "/configuration/security", "/swagger-ui.html", "/webjars/**"
+//                        //allow h2 console requests
+//                        ,"/h2-console","/h2-console/**","/**.ico")
+                "/**")
+                .permitAll();
 //                .anyRequest().authenticated()
-                .and()
-                // this filter will be used for /login
-                .addFilter(new JwtAuthenticationLoginFilter(authenticationManager()))
-                .addFilter(new JwtAuthorisationFilter(authenticationManager(), userPrincipalService))
-                // this disables session creation on Spring Security
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http
-                .headers()
-                .frameOptions().sameOrigin()
-                .cacheControl();
+//                .and()
+//                // this filter will be used for /login
+//                .addFilter(new JwtAuthenticationLoginFilter(authenticationManager()))
+//                .addFilter(new JwtAuthorisationFilter(authenticationManager(), userPrincipalService))
+//                // this disables session creation on Spring Security
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http
+//                .headers()
+//                .frameOptions().sameOrigin()
+//                .cacheControl();
     }
 
     @Override

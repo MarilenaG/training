@@ -31,9 +31,14 @@ public class SkillService {
         return skillRepository.findAll();
     }
 
-    public List<Skill> deleteSkill ( String title){
+    public void deleteSkill ( String title){
         Skill skill = skillRepository.findByTitle(title).orElseThrow(()-> new NoSuchElementException("No skill with title " + title));
         skillRepository.delete(skill);
-        return listSkills();
+
+    }
+
+    public Skill updateSkill ( Skill skill){
+        Skill updatedSkill = skillRepository.save(skill);
+        return  updatedSkill;
     }
 }
